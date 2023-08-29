@@ -62,3 +62,10 @@ def login():
         return jsonify({'message': 'Successful login', 'token': token, 'user': user.serialize()}), 200
     else:
         return jsonify({'message': 'Invalid credentials'}), 401
+
+@api.route('/me', methods=['GET'])
+@jwt_required()
+def get_user():
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    return jsonify(user.serialize()), 200
